@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^tests/testthat/mock/.perlbrew/.*$
+^tests/testthat/mock/build/.*$
+^tests/testthat/mock/dists/.*$
+^tests/testthat/mock/etc/.*$
+^tests/testthat/mock/perls/.*$
+^LICENSE\.md$

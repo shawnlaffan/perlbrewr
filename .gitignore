@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+
+## most of the mock directory
+tests/testthat/mock/*
+## un-ignore bin
+!tests/testthat/mock/bin/
+## but ignore everything in it
+tests/testthat/mock/bin/*
+## except perlbrew
+!tests/testthat/mock/bin/perlbrew
