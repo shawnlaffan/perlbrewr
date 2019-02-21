@@ -9,3 +9,5 @@
 ^LICENSE\.md$
 ^\.travis\.yml$
 ^cpanfile$
+^_pkgdown\.yml$
+^docs$

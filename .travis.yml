@@ -4,7 +4,36 @@ language: R
 sudo: false
 cache: packages
 
+r_packages:
+  - pkgdown
+
 r:
   - oldrel
   - release
   - devel
+
+env:
+  global:
+    - CI_NAME=travis-pro
+    - NOT_CRAN=true
+
+before_install: echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.Rprofile
+
+before_deploy:
+  - Rscript -e 'withr::with_temp_libpaths(action = "prefix", code = { devtools::install(pkg = ".", reload = FALSE); pkgdown::build_site(pkg = "."); })'
+  - touch gh-pages/.nojekyll
+
+notifications:
+  email: false
+deploy:
+  provider: pages
+  skip_cleanup: true
+  keep_history: true
+  local-dir: gh-pages
+  target-branch: gh-pages
+  committer-from-gh: true
+  github_token: $GITHUB_PAT
+  on:
+    branch: master
+    repo: kiwiroy/perlbrewr
+    condition: $TRAVIS_R_VERSION_STRING = "release"

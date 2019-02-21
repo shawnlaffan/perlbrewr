@@ -12,3 +12,5 @@ tests/testthat/mock/bin/*
 !tests/testthat/mock/bin/perlbrew
 !tests/testthat/mock/bin/LICENSE
 inst/doc
+
+gh-pages/
