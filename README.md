@@ -3,26 +3,53 @@
 perlbrewr
 =========
 
-The goal of perlbrewr is to ...
+The goal of perlbrewr is to assist the loading of a [perlbrew](https://perlbrew.pl) perl and optionally a library with the aim of improving reproducibility.
 
 Installation
 ------------
 
-You can install the released version of perlbrewr from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of perlbrewr from [GitHub](https://github.com/kiwiroy/perlbrewr) with:
 
 ``` r
-install.packages("perlbrewr")
+devtools::install_github("kiwiroy/perlbrewr")
 ```
 
 Example
 -------
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example of usage to load a perlbrew environment:
 
 ``` r
-## basic example code
+library(perlbrewr)
+#> Loading required package: magrittr
+#> Loading required package: stringr
+result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.26.0")
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+The brewed version of perl is now the default.
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
+``` r
+Sys.which("perl")
+#>                                                             perl 
+#> "/software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl"
+```
+
+This is also the case in `bash` shell blocks.
+
+``` bash
+which perl
+#> /software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl
+```
+
+By configuring `knitr`
+
+``` r
+knitr::opts_chunk$set(engine.path = list(perl = Sys.which("perl")[["perl"]]))
+```
+
+Perl code in `perl` blocks run the same interpreter.
+
+``` perl
+print "$^X\n";
+#> /software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl
+```

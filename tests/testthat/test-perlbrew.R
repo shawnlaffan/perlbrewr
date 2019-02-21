@@ -7,12 +7,12 @@ test_that("correctly initialised - sanity check", {
   expect_match(root, "mock$", label = "init_mock() successful")
   expect_in_environment(vars  = names(test_required_envvars),
                         label = "home, root, version and command, etc...")
-
-  brew_list <- system("perl ${perlbrew_command} list", intern = TRUE)
-
-  expect_equal(brew_list, c("  perl-5.26.0", "  perl-5.26.0@random"),
-               label = "perl 5.26.0")
   expect_perl(regexp = test_system_perl, fixed = TRUE, label = "system perl")
+})
+
+test_that("list", {
+  brew_list <- perlbrew_list()
+  expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@random"))
 })
 
 test_that("brewing", {
@@ -20,7 +20,7 @@ test_that("brewing", {
   expect_in_environment(vars = names(test_required_envvars))
 
   withr::with_envvar(new = test_unset_envvars, code = {
-    perlbrewr(root = root, version = "5.26.0")
+    perlbrew(root = root, version = "5.26.0")
 
     expect_in_environment(vars = names(test_required_envvars))
     expect_in_environment(vars = c("PERLBREW_MANPATH",
@@ -38,7 +38,7 @@ test_that("brewing", {
   withr::with_envvar(new = test_unset_envvars, code = {
     if (author_dbg) warn_perlbrew_envvars()
 
-    perlbrewr(root = root, version = "5.26.0", lib = "random")
+    perlbrew(root = root, version = "5.26.0", lib = "random")
 
     expect_in_environment(vars = names(test_required_envvars))
     expect_in_environment(vars = c("PERLBREW_MANPATH",
@@ -55,6 +55,10 @@ test_that("brewing", {
     expect_equal(Sys.getenv("PERLBREW_LIB"), "random",
                  label = "library var set")
     expect_perl(regexp = "mock/perls/perl-5.26.0/bin/perl$")
+
+    brew_list <- perlbrew_list()
+    expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@random"))
+    expect_equal(attr(brew_list, "active"), c("perl-5.26.0@random"))
     if (author_dbg) warn_perlbrew_envvars()
   })
 
@@ -65,7 +69,7 @@ test_that("drinking", {
   expect_in_environment(vars = names(test_required_envvars))
 
   withr::with_envvar(new = test_unset_envvars, code = {
-    perlbrewr(root = root, version = "5.26.0", lib = "random")
+    perlbrew(root = root, version = "5.26.0", lib = "random")
     expect_perl(regexp = "mock/perls/perl-5.26.0/bin/perl$")
 
     expect_in_environment(vars = names(test_required_envvars))
@@ -84,7 +88,7 @@ test_that("drinking", {
                  label = "library var set")
     if (author_dbg) warn_perlbrew_envvars()
 
-    unperlbrewr(root = root)
+    perlbrew_off(root = root)
 
     expect_not_in_environment(vars = c("PERLBREW_MANPATH",
                                        "PERLBREW_PERL",
@@ -95,4 +99,39 @@ test_that("drinking", {
                                        "PERL5LIB"))
     expect_perl(regexp = test_system_perl)
   })
+})
+
+test_that("creating libraries", {
+  tmp <- file.path(tempdir(), ".perlbrew")
+  if(!dir.exists(tmp)) {
+    dir.create(tmp)
+  }
+  withr::with_envvar(new = c("PERLBREW_HOME" = tmp), code = {
+    expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
+    brew_list <- perlbrew_list()
+    expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@example"))
+  })
+})
+
+test_that("edge cases", {
+  withr::with_envvar(new = list(PERLBREW_ROOT=NA), code = {
+    expect_error(perlbrew(), regexp = "root argument is not valid")
+    expect_error(perlbrew(root = "/unknown/directory/path"),
+                 regexp = "root argument is not valid")
+    expect_error(perlbrew_list(), regexp = "root argument is not valid")
+    expect_error(perlbrew_list(root = "/unknown/directory/path"),
+                 regexp = "root argument is not valid")
+  })
+  withr::with_envvar(new = list(), code = {
+    expect_error(perlbrew(),
+                 regexp = "version argument is not valid")
+  })
+  withr::with_envvar(new = list(), code = {
+    ## TODO: improve interface here.
+    expect_warning({ result <- perlbrew(version = "4.10.0") },
+                   regexp = "ERROR: The installation \"4.10.0\" is unknown",
+                   label = "bad version number")
+    expect_false(result, label = "returned false")
+  })
+
 })
