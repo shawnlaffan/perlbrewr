@@ -8,6 +8,7 @@ tests/testthat/mock/*
 !tests/testthat/mock/bin/
 ## but ignore everything in it
 tests/testthat/mock/bin/*
-## except perlbrew
+## except perlbrew and license
 !tests/testthat/mock/bin/perlbrew
+!tests/testthat/mock/bin/LICENSE
 inst/doc
