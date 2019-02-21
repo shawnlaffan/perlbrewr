@@ -10,8 +10,7 @@ init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
   do.call("Sys.setenv", required_envvars)
   # initialise perlbrew from mock directory
   init <- system("perl ${perlbrew_command} init", intern = TRUE,
-              ignore.stdout = TRUE, ignore.stderr = !author_dbg,
-              timeout = 2)
+              ignore.stdout = TRUE, ignore.stderr = !author_dbg)
   status <- attr(init, "status")
   if(!is.null(status) && author_dbg) {
     warning(paste0("perlbrew init failed status=", status))
@@ -33,7 +32,7 @@ init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
   # create a local lib
   lib_create <- suppressWarnings({
     system("perl ${perlbrew_command} lib create 5.26.0@random", intern = TRUE,
-           ignore.stdout = TRUE, ignore.stderr = !author_dbg, timeout = 2)
+           ignore.stdout = TRUE, ignore.stderr = !author_dbg)
   })
   status <- attr(lib_create, "status")
   if(!is.null(status) && author_dbg) {
