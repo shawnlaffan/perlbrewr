@@ -9,7 +9,7 @@
 #' @export
 perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
                       version = NULL, lib = NULL) {
-  if(is.null(root) || is.na(root) || isFALSE(dir.exists(root))) {
+  if(is.null(root) || is.na(root) || isTRUE(!dir.exists(root))) {
     stop("root argument is not valid", call. = FALSE)
   }
   if(is.null(version)) { stop("version argument is not valid", call. = FALSE) }
@@ -45,7 +45,7 @@ perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #' @return character vector
 #' @export
 perlbrew_list <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
-  if(is.null(root) || is.na(root) || isFALSE(dir.exists(root))) {
+  if(is.null(root) || is.na(root) || isTRUE(!dir.exists(root))) {
     stop("root argument is not valid", call. = FALSE)
   }
 

@@ -8,3 +8,4 @@
 ^tests/testthat/mock/perls/.*$
 ^LICENSE\.md$
 ^\.travis\.yml$
+^cpanfile$
