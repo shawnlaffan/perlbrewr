@@ -10,3 +10,4 @@ tests/testthat/mock/*
 tests/testthat/mock/bin/*
 ## except perlbrew
 !tests/testthat/mock/bin/perlbrew
+inst/doc

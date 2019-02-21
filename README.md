@@ -1,4 +1,6 @@
 
+[![Travis build status](https://travis-ci.org/kiwiroy/perlbrewr.svg?branch=master)](https://travis-ci.org/kiwiroy/perlbrewr)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!--   home: !r Sys.getenv("PERLBREW_HOME") -->
 perlbrewr
@@ -64,7 +66,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.26.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpTpLnsP/.perlbrew/libs/perl-5.26.0@example/lib/perl5"
+#> [1] "/tmp/RtmpVvolRZ/.perlbrew/libs/perl-5.26.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
