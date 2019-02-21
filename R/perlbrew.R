@@ -25,6 +25,7 @@ perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #' @param lib new local lib name
 #'
 #' @return Boolean TRUE for success
+#' @export
 perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
                                 version = NULL, lib = NULL) {
   lib_name <- perlbrew_id(version, lib)
@@ -69,6 +70,7 @@ perlbrew_list <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
 #' @return Boolean
 #' @export
 perlbrew_off <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
+  # might need to Sys.unsetenv("PERLBREW_LIB")
   variables <- perlbrew_variables(root)
   configure_environment(variables)
   variables$result == 0
@@ -78,9 +80,9 @@ perlbrew_off <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
 # configure_environment
 #
 configure_environment <- function(environment_variables) {
-  # if(environment_variables$result != 0) {
-  #   return(environment_variables$result)
-  # }
+  if(environment_variables$result != 0) {
+    return(environment_variables$result)
+  }
   if(length(environment_variables$unset) > 0) {
     n <- names(environment_variables$unset)
     # warning("unsetting: ", paste0(n, sep = "\n"))

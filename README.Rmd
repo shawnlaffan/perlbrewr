@@ -1,11 +1,11 @@
 ---
 output: github_document
 params:
-  root: !r Sys.getenv("PERLBREW_ROOT")
-  home: !r Sys.getenv("PERLBREW_HOME")
+  root: !r file.path(getwd(),"tests","testthat","mock")
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!--   home: !r Sys.getenv("PERLBREW_HOME") -->
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
@@ -15,7 +15,11 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 Sys.setenv("PERLBREW_ROOT"=params$root)
-Sys.setenv("PERLBREW_HOME"=params$home)
+tmp <- file.path(tempdir(), ".perlbrew")
+if(!dir.exists(tmp)) {
+  dir.create(tmp)
+}
+Sys.setenv("PERLBREW_HOME"=tmp)
 Sys.setenv("perlbrew_command"=file.path(params$root, "bin", "perlbrew"))
 ```
 # perlbrewr
@@ -59,3 +63,52 @@ Perl code in `perl` blocks run the same interpreter.
 ```{r perl-code, engine = "perl"}
 print "$^X\n";
 ```
+
+## `local::lib` library access
+
+Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
+
+```{r create-lib, include=FALSE}
+perlbrew_lib_create(version = "5.26.0", lib = "example")
+```
+
+```{r use-lib}
+perlbrew(version = "5.26.0", lib = "example")
+Sys.getenv("PERL5LIB")
+```
+
+Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
+```{r install-something, engine = "bash"}
+cpanm -n -q --installdeps .
+```
+
+Since `perlbrewr::perlbrew` sets the `PERL5LIB` environment variable perl code
+relying on the dependencies is now sucessful.
+```{r perl-code-2, engine = "perl"}
+use Mojo::Base -strict;
+use Mojo::File;
+say Mojo::File->new('cpanfile')->slurp;
+```
+
+## `perlbrew_list` and `perlbrew_lib_create`
+
+```{r re-root, include = FALSE}
+## This shortens the lists in the next two
+root <- file.path(getwd(),"tests","testthat","mock")
+pbcmd <- file.path(root, "bin", "perlbrew")
+Sys.setenv("PERLBREW_ROOT"=root, "perlbrew_command"=pbcmd)
+```
+
+`perlbrew_list` returns a listing of the available versions of perl and any `local::lib` libraries. If a version or library is in use, the `active` object attribute is also set.
+
+```{r perlbrew-list}
+perlbrew_list()
+```
+
+A new library is created with `perlbrew_lib_create`.
+
+```{r perlbrew-lib-create-show}
+perlbrew_lib_create(version = "5.26.0", lib = "foobar")
+perlbrew_list()
+```
+
