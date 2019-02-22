@@ -9,9 +9,7 @@
 #' @export
 perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
                       version = NULL, lib = NULL) {
-  if(is.null(root) || is.na(root) || isTRUE(!dir.exists(root))) {
-    stop("root argument is not valid", call. = FALSE)
-  }
+  if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
   if(is.null(version)) { stop("version argument is not valid", call. = FALSE) }
   variables <- perlbrew_variables(root, version, lib)
   configure_environment(variables)
@@ -28,6 +26,7 @@ perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #' @export
 perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
                                 version = NULL, lib = NULL) {
+  if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
   lib_name <- perlbrew_id(version, lib)
   res <- run_perlbrew_command(paste0("${perlbrew_command} lib create ", lib_name))
   status <- attr(res, "status")
@@ -45,9 +44,7 @@ perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #' @return character vector
 #' @export
 perlbrew_list <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
-  if(is.null(root) || is.na(root) || isTRUE(!dir.exists(root))) {
-    stop("root argument is not valid", call. = FALSE)
-  }
+  if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
 
   perls_libs <- run_perlbrew_command("${perlbrew_command} list; ")
   status     <- attr(perls_libs, "status")
@@ -104,6 +101,24 @@ configure_environment <- function(environment_variables) {
   return(0)
 }
 
+#' is_valid_root
+#'
+#' @param root PERLBREW_ROOT
+#'
+#' @return Boolean
+#' @noRd
+is_valid_root <- function(root) {
+  # basics
+  if (is.null(root))     { return(FALSE) }
+  if (is.na(root))       { return(FALSE) }
+  if (!dir.exists(root)) { return(FALSE) }
+  # structure
+  if (!dir.exists(file.path(root, "bin")))                  { return(FALSE) }
+  if (!file_test("-x", file.path(root, "bin", "perlbrew"))) { return(FALSE) }
+  if (!dir.exists(file.path(root, "etc")))                  { return(FALSE) }
+  if (!file_test("-f", file.path(root, "etc", "bashrc")))   { return(FALSE) }
+  return(TRUE)
+}
 
 #' perlbrew_variables
 #'
