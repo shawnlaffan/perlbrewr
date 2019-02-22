@@ -6,7 +6,20 @@
 perlbrewr
 =========
 
-The goal of perlbrewr is to assist the loading of a [perlbrew](https://perlbrew.pl) perl and optionally a library with the aim of improving reproducibility.
+The goal of perlbrewr is to assist the loading of a [perlbrew](https://perlbrew.pl) perl and optionally a library with the aim of improving reproducibility. The central task that perlbrewr performs is management of the environment variables in the same manner as perlbrew itself, by calling perlbrew commands and translating the changes there into R function calls that achieve the same outcome. Primarily, these are `Sys.setenv` and `Sys.unsetenv`.
+
+Dependencies
+------------
+
+### R
+
+-   R (&gt;= 3.3.0)
+-   magrittr
+-   stringr
+
+### Non R
+
+-   [perlbrew](https://perlbrew.pl)
 
 Installation
 ------------
@@ -65,7 +78,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/Rtmpr51M3R/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/RtmpxYONa4/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).

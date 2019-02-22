@@ -26,8 +26,24 @@ Sys.setenv("perlbrew_command"=file.path(params$root, "bin", "perlbrew"))
 ```
 # perlbrewr
 
-The goal of perlbrewr is to assist the loading of a [perlbrew](https://perlbrew.pl) perl and optionally a library with the aim
-of improving reproducibility.
+The goal of perlbrewr is to assist the loading of a [perlbrew](https://perlbrew.pl)
+perl and optionally a library with the aim of improving reproducibility. The
+central task that perlbrewr performs is management of the environment variables
+in the same manner as perlbrew itself, by calling perlbrew commands and
+translating the changes there into R function calls that achieve the same
+outcome. Primarily, these are `Sys.setenv` and `Sys.unsetenv`.
+
+## Dependencies
+
+### R
+
+* R (>= 3.3.0)
+* magrittr
+* stringr
+
+### Non R
+
+* [perlbrew](https://perlbrew.pl)
 
 ## Installation
 
