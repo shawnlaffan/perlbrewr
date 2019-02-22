@@ -26,7 +26,7 @@ This is a basic example of usage to load a perlbrew environment:
 library(perlbrewr)
 #> Loading required package: magrittr
 #> Loading required package: stringr
-result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.26.0")
+result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.24.0")
 ```
 
 The brewed version of perl is now the default.
@@ -34,14 +34,14 @@ The brewed version of perl is now the default.
 ``` r
 Sys.which("perl")
 #>                                                             perl 
-#> "/software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl"
+#> "/software/programming/perlbrew-0.76/perls/perl-5.24.0/bin/perl"
 ```
 
 This is also the case in `bash` shell blocks.
 
 ``` bash
 which perl
-#> /software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl
+#> /software/programming/perlbrew-0.76/perls/perl-5.24.0/bin/perl
 ```
 
 By configuring `knitr`
@@ -54,7 +54,7 @@ Perl code in `perl` blocks run the same interpreter.
 
 ``` perl
 print "$^X\n";
-#> /software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl
+#> /software/programming/perlbrew-0.76/perls/perl-5.24.0/bin/perl
 ```
 
 ### local::lib library access
@@ -62,10 +62,10 @@ print "$^X\n";
 Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
 
 ``` r
-perlbrew(version = "5.26.0", lib = "example")
+perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmppgCqIK/.perlbrew/libs/perl-5.26.0@example/lib/perl5"
+#> [1] "/tmp/Rtmp0KbXWY/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
@@ -91,18 +91,19 @@ say Mojo::File->new('cpanfile')->slurp;
 
 ``` r
 perlbrew_list()
-#> [1] "perl-5.26.0"         "perl-5.26.0@example"
+#> [1] "perl-5.24.0"         "perl-5.24.0@example" "perl-5.26.0"        
 #> attr(,"active")
-#> [1] "perl-5.26.0@example"
+#> [1] "perl-5.24.0@example"
 ```
 
 A new library is created with `perlbrew_lib_create`.
 
 ``` r
-perlbrew_lib_create(version = "5.26.0", lib = "foobar")
+perlbrew_lib_create(version = "5.24.0", lib = "foobar")
 #> [1] TRUE
 perlbrew_list()
-#> [1] "perl-5.26.0"         "perl-5.26.0@example" "perl-5.26.0@foobar" 
+#> [1] "perl-5.24.0"         "perl-5.24.0@example" "perl-5.24.0@foobar" 
+#> [4] "perl-5.26.0"        
 #> attr(,"active")
-#> [1] "perl-5.26.0@example"
+#> [1] "perl-5.24.0@example"
 ```

@@ -1,6 +1,28 @@
 
 author_dbg <- FALSE
 
+as.version_string <- function(fmt = "", vstring = "5.26.0") {
+  vstring <- gsub(vstring, pattern = "^(perl-|v)", replacement = "")
+  v <- as.integer(unlist(strsplit(vstring, "\\.")))
+  sprintf(fmt, v[1], v[2], v[3])
+}
+
+as.perlbrew_version <- function(vstring = "5.26.0") {
+  as.version_string("perl-%d.%d.%d", vstring = vstring)
+}
+
+as.perl_verbose_version <- function(vstring = "5.26.0") {
+  as.version_string("perl %d, version %d, subversion %d", vstring = vstring)
+}
+
+as.perl_version <- function(vstring = "5.26.0") {
+  as.version_string("%d.%03d%03d", vstring = vstring)
+}
+
+as.perl_vversion <- function(vstring = "5.26.0") {
+  as.version_string("v%d.%d.%d", vstring = vstring)
+}
+
 init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
 {
   required_envvars <-
@@ -15,20 +37,9 @@ init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
   if(!is.null(status) && author_dbg) {
     warning(paste0("perlbrew init failed status=", status))
   }
-  # create a directory for a version of perl
-  five_two_six <- file.path(perlbrew_root, "perls", "perl-5.26.0")
-  if( !dir.exists(five_two_six) ) {
-    dir.create(five_two_six, recursive = TRUE)
-  }
-  # write .version file
-  text <- c("5.026000")
-  writeLines(text = text, con = file.path(five_two_six, ".version"), sep = "\n")
-  # create a bin directory
-  five_two_six <- file.path(five_two_six, "bin")
-  if( !dir.exists(five_two_six) ) {
-    dir.create(five_two_six)
-  }
-  write_mock_perl(path = file.path(five_two_six, "perl"))
+  mock_installed_perl(root = perlbrew_root, "5.24.0")
+  mock_installed_perl(root = perlbrew_root, "5.26.0")
+
   # create a local lib
   lib_create <- suppressWarnings({
     system("perl ${perlbrew_command} lib create 5.26.0@random", intern = TRUE,
@@ -41,12 +52,31 @@ init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
   required_envvars
 }
 
-write_mock_perl <- function (path = NULL) {
+mock_installed_perl <- function(root = NULL, mock_version = "perl-5.26.0") {
+  # create a directory for a version of perl
+  five_two_x <- file.path(root, "perls", as.perlbrew_version(mock_version))
+  if( !dir.exists(five_two_x) ) {
+    dir.create(five_two_x, recursive = TRUE)
+  }
+  # write .version file
+  text <- c(as.perl_version(mock_version))
+  writeLines(text = text, con = file.path(five_two_x, ".version"), sep = "\n")
+  # create a bin directory
+  five_two_x <- file.path(five_two_x, "bin")
+  if( !dir.exists(five_two_x) ) {
+    dir.create(five_two_x)
+  }
+  write_mock_perl(path = file.path(five_two_x, "perl"),
+                  mock_version = mock_version)
+}
+
+write_mock_perl <- function (path = NULL, mock_version = "5.26.0") {
   text <- c(
     "#!/bin/sh",
     "",
     "cat - <<'EOF'",
-    "This is perl 5, version 26, subversion 0 (v5.26.0) built for x86_64-linux",
+    paste0("This is ", as.perl_verbose_version(mock_version),
+           " (", as.perl_vversion(mock_version), ") built for x86_64-linux"),
     "(with 1 registered patch, see perl -V for more detail)",
     "",
     "Copyright 1987-2018, Larry Wall",
@@ -64,6 +94,9 @@ write_mock_perl <- function (path = NULL) {
 }
 
 test_system_perl <- Sys.which("perl")[["perl"]]
+
+## N.B. travis perlbrew has 5.24.0, but not 5.26.0
+test_perl_version <- "perl-5.26.0"
 
 Sys.unsetenv("PERLBREW_ROOT")
 

@@ -12,7 +12,7 @@ test_that("correctly initialised - sanity check", {
 
 test_that("list", {
   brew_list <- perlbrew_list()
-  expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@random"))
+  expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
 })
 
 test_that("brewing", {
@@ -57,7 +57,7 @@ test_that("brewing", {
     expect_perl(regexp = "mock/perls/perl-5.26.0/bin/perl$")
 
     brew_list <- perlbrew_list()
-    expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@random"))
+    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
     expect_equal(attr(brew_list, "active"), c("perl-5.26.0@random"))
     if (author_dbg) warn_perlbrew_envvars()
   })
@@ -109,7 +109,7 @@ test_that("creating libraries", {
   withr::with_envvar(new = c("PERLBREW_HOME" = tmp), code = {
     expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
     brew_list <- perlbrew_list()
-    expect_equivalent(brew_list, c("perl-5.26.0", "perl-5.26.0@example"))
+    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@example"))
   })
 })
 

@@ -43,7 +43,7 @@ This is a basic example of usage to load a perlbrew environment:
 
 ```{r example}
 library(perlbrewr)
-result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.26.0")
+result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.24.0")
 ```
 
 The brewed version of perl is now the default.
@@ -71,17 +71,22 @@ print "$^X\n";
 Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
 
 ```{r create-lib, include=FALSE}
-perlbrew_lib_create(version = "5.26.0", lib = "example")
+perlbrew_lib_create(version = "5.24.0", lib = "example")
 ```
 
 ```{r use-lib}
-perlbrew(version = "5.26.0", lib = "example")
+perlbrew(version = "5.24.0", lib = "example")
 Sys.getenv("PERL5LIB")
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
 ```{r install-something, engine = "bash"}
 cpanm -n -q --installdeps .
+```
+
+```{r knitr-engine-opts, include = FALSE}
+knitr::opts_chunk$set(engine.path = list(perl = Sys.which("perl")[["perl"]]),
+                      engine.opts = list(perl = paste0("-I",Sys.getenv("PERL5LIB"))))
 ```
 
 Since `perlbrewr::perlbrew` sets the `PERL5LIB` environment variable perl code
@@ -110,7 +115,7 @@ perlbrew_list()
 A new library is created with `perlbrew_lib_create`.
 
 ```{r perlbrew-lib-create-show}
-perlbrew_lib_create(version = "5.26.0", lib = "foobar")
+perlbrew_lib_create(version = "5.24.0", lib = "foobar")
 perlbrew_list()
 ```
 
