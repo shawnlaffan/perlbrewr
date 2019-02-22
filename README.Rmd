@@ -1,7 +1,7 @@
 ---
 output: github_document
 params:
-  root: !r file.path(getwd(),"tests","testthat","mock")
+  root: !r Sys.getenv("PERLBREW_ROOT")
 ---
 [![Travis build status](https://travis-ci.org/kiwiroy/perlbrewr.svg?branch=master)](https://travis-ci.org/kiwiroy/perlbrewr)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -66,7 +66,7 @@ Perl code in `perl` blocks run the same interpreter.
 print "$^X\n";
 ```
 
-## `local::lib` library access
+### local::lib library access
 
 Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
 
@@ -92,7 +92,7 @@ use Mojo::File;
 say Mojo::File->new('cpanfile')->slurp;
 ```
 
-## `perlbrew_list` and `perlbrew_lib_create`
+### listing and creating libraries
 
 ```{r re-root, include = FALSE}
 ## This shortens the lists in the next two

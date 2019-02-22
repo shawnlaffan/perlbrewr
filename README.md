@@ -57,8 +57,7 @@ print "$^X\n";
 #> /software/programming/perlbrew-0.76/perls/perl-5.26.0/bin/perl
 ```
 
-`local::lib` library access
----------------------------
+### local::lib library access
 
 Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
 
@@ -66,7 +65,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.26.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpVWEB9s/.perlbrew/libs/perl-5.26.0@example/lib/perl5"
+#> [1] "/tmp/RtmppgCqIK/.perlbrew/libs/perl-5.26.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
@@ -86,8 +85,7 @@ say Mojo::File->new('cpanfile')->slurp;
 #> requires "Mojolicious" => 8.0;
 ```
 
-`perlbrew_list` and `perlbrew_lib_create`
------------------------------------------
+### listing and creating libraries
 
 `perlbrew_list` returns a listing of the available versions of perl and any `local::lib` libraries. If a version or library is in use, the `active` object attribute is also set.
 

@@ -17,3 +17,5 @@ Suggests:
     rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
+URL: https://github.com/kiwiroy/perlbrewr
+BugReports: https://github.com/kiwiroy/perlbrewr/issues
