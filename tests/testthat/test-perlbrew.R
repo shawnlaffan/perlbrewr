@@ -32,6 +32,7 @@ test_that("brewing", {
     expect_not_in_environment(vars = c("PERLBREW_LIB", "PERL5LIB"))
     expect_perl(regexp = "mock/perls/perl-5.26.0/bin/perl$")
 
+    expect_knitr_path_set(which_perl())
     if (author_dbg) warn_perlbrew_envvars()
   })
 
@@ -59,6 +60,9 @@ test_that("brewing", {
     brew_list <- perlbrew_list()
     expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
     expect_equal(attr(brew_list, "active"), c("perl-5.26.0@random"))
+    expect_knitr_path_set(which_perl())
+    expect_knitr_opts_match(Sys.getenv("PERL5LIB"))
+
     if (author_dbg) warn_perlbrew_envvars()
   })
 
@@ -98,6 +102,7 @@ test_that("drinking", {
                                        "PERL_MM_OPT",
                                        "PERL5LIB"))
     expect_perl(regexp = test_system_perl)
+    expect_knitr_path_set(test_system_perl)
   })
 })
 

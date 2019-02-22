@@ -9,3 +9,7 @@ warn_perlbrew_envvars <- function () {
   warning(paste0(p, sep = "\n"))
   warning(paste0(e[p], sep = "\n"))
 }
+
+which_perl <- function() {
+  path <- Sys.which("perl")[["perl"]]
+}

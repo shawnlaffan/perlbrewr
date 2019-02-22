@@ -5,7 +5,8 @@ Authors@R: c(
   person("Roy", "Storey", email = "kiwiroy@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1375-7136")))
 Description: The goal of perlbrewr is to assist the loading of a perlbrew 
   perl and optionally a library with the aim of improving reproducibility.
-Depends: R (>= 3.3.0),
+Depends: R (>= 3.3.0)
+Imports: knitr (>= 1.21),
   magrittr,
   stringr
 License: MIT + file LICENSE
@@ -14,7 +15,6 @@ LazyData: true
 Suggests:
     testthat,
     withr,
-    knitr (>= 1.21),
     rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

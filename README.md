@@ -37,8 +37,6 @@ This is a basic example of usage to load a perlbrew environment:
 
 ``` r
 library(perlbrewr)
-#> Loading required package: magrittr
-#> Loading required package: stringr
 result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.24.0")
 ```
 
@@ -78,7 +76,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpxYONa4/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/RtmpeRsI5B/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
