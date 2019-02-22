@@ -73,21 +73,33 @@ perlbrew_off <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
   variables$result == 0
 }
 
-#
-# configure_environment
-#
+#' configure_environment
+#'
+#' @param environment_variables list of lists
+#'
+#' @return 0
+#' @noRd
 configure_environment <- function(environment_variables) {
   if(environment_variables$result != 0) {
     return(environment_variables$result)
   }
   if(length(environment_variables$unset) > 0) {
     n <- names(environment_variables$unset)
+    if("PERL5LIB" %in% n) {
+      knitr::opts_chunk$set(engine.opts = list(perl = ""))
+    }
     # warning("unsetting: ", paste0(n, sep = "\n"))
     Sys.unsetenv(n)
   }
 
   if(length(environment_variables$export) > 0) {
     n <- names(environment_variables$export)
+    if("PERL5LIB" %in% n) {
+      parts <- unlist(strsplit(environment_variables$export$PERL5LIB, ":"))
+      knitr::opts_chunk$set(
+        engine.opts = list(perl = paste("-I", parts, collapse = " ", sep = ""))
+      )
+    }
     # warning("setting: ", paste0(n, sep = "\n"))
     do.call("Sys.setenv", environment_variables$export)
   }
@@ -96,6 +108,9 @@ configure_environment <- function(environment_variables) {
   status <- attr(path, "status")
   if(is.null(status)) {
     Sys.setenv("PATH" = path)
+    knitr::opts_chunk$set(
+      engine.path = list(perl = Sys.which("perl")[["perl"]])
+    )
   }
 
   return(0)
@@ -106,6 +121,7 @@ configure_environment <- function(environment_variables) {
 #' @param root PERLBREW_ROOT
 #'
 #' @return Boolean
+#' @importFrom utils file_test
 #' @noRd
 is_valid_root <- function(root) {
   # basics
