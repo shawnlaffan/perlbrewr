@@ -100,10 +100,13 @@ say Mojo::File->new('cpanfile')->slurp;
 ### listing and creating libraries
 
 ```{r re-root, include = FALSE}
-## This shortens the lists in the next two
-root <- file.path(getwd(),"tests","testthat","mock")
-pbcmd <- file.path(root, "bin", "perlbrew")
-Sys.setenv("PERLBREW_ROOT"=root, "perlbrew_command"=pbcmd)
+brew_list <- perlbrew_list()
+if(length(brew_list) > 12) {
+  ## This shortens the lists in the next two
+  root <- file.path(getwd(),"tests","testthat","mock")
+  pbcmd <- file.path(root, "bin", "perlbrew")
+  Sys.setenv("PERLBREW_ROOT"=root, "perlbrew_command"=pbcmd)
+}
 ```
 
 `perlbrew_list` returns a listing of the available versions of perl and any `local::lib` libraries. If a version or library is in use, the `active` object attribute is also set.

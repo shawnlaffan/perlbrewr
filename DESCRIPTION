@@ -1,9 +1,10 @@
 Package: perlbrewr
-Title: What the Package Does (one line, title case)
+Title: Integrates Perlbrew With R, Specifically (knitr & rmarkdown)
 Version: 0.0.0.9000
 Authors@R: c(
   person("Roy", "Storey", email = "kiwiroy@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1375-7136")))
-Description: What the package does (one paragraph).
+Description: The goal of perlbrewr is to assist the loading of a perlbrew 
+  perl and optionally a library with the aim of improving reproducibility.
 Depends: R (>= 3.3.0),
   magrittr,
   stringr
