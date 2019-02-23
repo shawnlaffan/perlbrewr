@@ -177,7 +177,7 @@ perlbrew_variables <- function(root = NULL, version = NULL, lib = NULL) {
 #' @return output of command
 #' @noRd
 run_perlbrew_command <- function(perlbrew_cmd) {
-  cmd <- paste0("bash -c '", source_cmd(), perlbrew_cmd, "' 2>&1")
+  cmd <- paste0("bash --norc --noprofile -c '", source_cmd(), perlbrew_cmd, "' 2>&1")
   result <- system(cmd, intern = TRUE)
   status <- attr(result, "status")
   if(!is.null(status)) {
@@ -187,7 +187,7 @@ run_perlbrew_command <- function(perlbrew_cmd) {
 }
 
 source_cmd <- function() {
-  return("source ${PERLBREW_ROOT}/etc/bashrc; ")
+  return("source ${PERLBREW_ROOT:-/fail}/etc/bashrc; ")
 }
 
 #' variables_to_list
