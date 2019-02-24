@@ -118,25 +118,56 @@ test_that("creating libraries", {
   })
 })
 
+test_that("error conditions", {
+
+  expect_error(perlbrew(),
+               regexp = "version argument is not valid")
+  ## TODO: improve interface here.
+  expect_warning({ result <- perlbrew(version = "4.10.0") },
+                 regexp = "ERROR: The installation \"4.10.0\" is unknown",
+                 label = "bad version number")
+  expect_false(result, label = "returned false")
+})
+
 test_that("edge cases", {
-  withr::with_envvar(new = list(PERLBREW_ROOT=NA), code = {
+  mock_root <- Sys.getenv("PERLBREW_ROOT", unset = "/fail/")
+  sys_path <- unlist(strsplit(Sys.getenv("PATH"), split = ":"))
+  sys_path <- sys_path[!grepl(sys_path, pattern = mock_root)]
+  sys_path <- paste0(sys_path, collapse = ":")
+
+  no_perlbrew <- list(
+    PERLBREW_ROOT=NA,
+    PERLBREW_HOME=NA,
+    perlbrew_command=NA,
+    PATH=sys_path)
+
+  withr::with_envvar(new = no_perlbrew, code = {
     expect_error(perlbrew(), regexp = "root argument is not valid")
     expect_error(perlbrew(root = "/unknown/directory/path"),
                  regexp = "root argument is not valid")
     expect_error(perlbrew_list(), regexp = "root argument is not valid")
     expect_error(perlbrew_list(root = "/unknown/directory/path"),
                  regexp = "root argument is not valid")
+
+    withr::with_options(new = list("perlbrewr.use_bundled"=TRUE), code = {
+      expect_warning(expect_error(perlbrew(), regexp = "version argument is not valid"),
+                     "Using bundled perlbrew root from perlbrewr package.")
+    })
   })
-  withr::with_envvar(new = list(), code = {
-    expect_error(perlbrew(),
-                 regexp = "version argument is not valid")
-  })
-  withr::with_envvar(new = list(), code = {
-    ## TODO: improve interface here.
-    expect_warning({ result <- perlbrew(version = "4.10.0") },
-                   regexp = "ERROR: The installation \"4.10.0\" is unknown",
-                   label = "bad version number")
-    expect_false(result, label = "returned false")
+
+  withr::with_envvar(new = no_perlbrew, code = {
+    tmp_root <- file.path(tempdir(), "perlbrew")
+    dir.create(file.path(tmp_root, "bin"), recursive = TRUE)
+    file.copy(file.path(mock_root, "bin", "perlbrew"),
+              file.path(tmp_root, "bin", "perlbrew"),
+              copy.mode = TRUE)
+    tmp_vars <- init_mock(tmp_root)
+    withr::with_envvar(
+      new = list(PERLBREW_ROOT=NA, PERLBREW_HOME=NA, perlbrew_command=NA),
+      code = {
+        expect_error(perlbrew_list(tmp_vars$PERLBREW_ROOT),
+                     "error in running command")
+      })
   })
 
 })

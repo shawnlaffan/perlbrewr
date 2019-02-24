@@ -11,6 +11,19 @@ tests/testthat/mock/bin/*
 ## except perlbrew and license
 !tests/testthat/mock/bin/perlbrew
 !tests/testthat/mock/bin/LICENSE
+
+## inst/doc
 inst/doc
+## most of the bundled perlbrew directory
+inst/perlbrew/*
+## un-ignore bin
+inst/perlbrew/bin/
+## but ignore everything in it
+inst/perlbrew/bin/*
+## except perlbrew and license
+!inst/perlbrew/bin/perlbrew
+!inst/perlbrew/bin/LICENSE
+
+
 
 gh-pages/

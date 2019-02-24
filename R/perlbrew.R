@@ -7,7 +7,7 @@
 #'
 #' @return Boolean
 #' @export
-perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
+perlbrew <- function(root = perlbrewr_perlbrew_root(),
                       version = NULL, lib = NULL) {
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
   if(is.null(version)) { stop("version argument is not valid", call. = FALSE) }
@@ -24,11 +24,11 @@ perlbrew <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #'
 #' @return Boolean TRUE for success
 #' @export
-perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
+perlbrew_lib_create <- function(root = perlbrewr_perlbrew_root(),
                                 version = NULL, lib = NULL) {
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
   lib_name <- perlbrew_id(version, lib)
-  res <- run_perlbrew_command(paste0("${perlbrew_command} lib create ", lib_name))
+  res <- run_perlbrew_command(paste0("${perlbrew_command:-perlbrew} lib create ", lib_name))
   status <- attr(res, "status")
   if(is.null(status)) {
     expected <- paste0(lib_name, "' is created")
@@ -43,10 +43,10 @@ perlbrew_lib_create <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
 #'
 #' @return character vector
 #' @export
-perlbrew_list <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
+perlbrew_list <- function(root = perlbrewr_perlbrew_root()) {
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
 
-  perls_libs <- run_perlbrew_command("${perlbrew_command} list; ")
+  perls_libs <- run_perlbrew_command("${perlbrew_command:-perlbrew} list; ")
   status     <- attr(perls_libs, "status")
 
   if(!is.null(status)) {
@@ -66,7 +66,7 @@ perlbrew_list <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
 #'
 #' @return Boolean
 #' @export
-perlbrew_off <- function(root = Sys.getenv("PERLBREW_ROOT", unset = NA)) {
+perlbrew_off <- function(root = perlbrewr_perlbrew_root()) {
   # might need to Sys.unsetenv("PERLBREW_LIB")
   variables <- perlbrew_variables(root)
   configure_environment(variables)
@@ -152,7 +152,7 @@ perlbrew_variables <- function(root = NULL, version = NULL, lib = NULL) {
   }
 
   version      <- perlbrew_id(version, lib)
-  perlbrew_cmd <- paste0("${perlbrew_command} --quiet env ", version, "; ")
+  perlbrew_cmd <- paste0("${perlbrew_command:-perlbrew} --quiet env ", version, "; ")
 
   env_vars <- run_perlbrew_command(perlbrew_cmd = perlbrew_cmd)
   status   <- attr(env_vars, "status")
