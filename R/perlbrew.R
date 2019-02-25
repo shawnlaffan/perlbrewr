@@ -86,7 +86,13 @@ configure_environment <- function(environment_variables) {
   if(length(environment_variables$unset) > 0) {
     n <- names(environment_variables$unset)
     if("PERL5LIB" %in% n) {
-      knitr::opts_chunk$set(engine.opts = list(perl = ""))
+      engine_opts <- shellwords(knitr::opts_chunk$get("engine.opts")$perl)
+      pattern <- paste0("^-I", Sys.getenv("PERLBREW_HOME"))
+      to_remove <- engine_opts[grepl(pattern = pattern, x = engine_opts)]
+      augment_knitr_opts_chunk(opt = "engine.opts",
+                               value = to_remove,
+                               action = "remove")
+      #knitr::opts_chunk$set(engine.opts = list(perl = ""))
     }
     # warning("unsetting: ", paste0(n, sep = "\n"))
     Sys.unsetenv(n)
@@ -96,9 +102,10 @@ configure_environment <- function(environment_variables) {
     n <- names(environment_variables$export)
     if("PERL5LIB" %in% n) {
       parts <- unlist(strsplit(environment_variables$export$PERL5LIB, ":"))
-      knitr::opts_chunk$set(
-        engine.opts = list(perl = paste("-I", parts, collapse = " ", sep = ""))
-      )
+      engine_opts <- paste("-I", parts, collapse = " ", sep = "")
+      augment_knitr_opts_chunk(opt = "engine.opts",
+                               value = engine_opts,
+                               action = "add")
     }
     # warning("setting: ", paste0(n, sep = "\n"))
     do.call("Sys.setenv", environment_variables$export)
@@ -108,9 +115,9 @@ configure_environment <- function(environment_variables) {
   status <- attr(path, "status")
   if(is.null(status)) {
     Sys.setenv("PATH" = path)
-    knitr::opts_chunk$set(
-      engine.path = list(perl = Sys.which("perl")[["perl"]])
-    )
+    augment_knitr_opts_chunk(opt = "engine.path",
+                             value = Sys.which("perl")[["perl"]],
+                             action = "add")
   }
 
   return(0)

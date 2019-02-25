@@ -133,6 +133,7 @@ test_that("edge cases", {
   mock_root <- Sys.getenv("PERLBREW_ROOT", unset = "/fail/")
   sys_path <- unlist(strsplit(Sys.getenv("PATH"), split = ":"))
   sys_path <- sys_path[!grepl(sys_path, pattern = mock_root)]
+  sys_path <- sys_path[!grepl(sys_path, pattern = "/perlbrew[^/]*/bin")]
   sys_path <- paste0(sys_path, collapse = ":")
 
   no_perlbrew <- list(

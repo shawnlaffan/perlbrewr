@@ -4,8 +4,8 @@
 \alias{perlbrew_lib_create}
 \title{perlbrew_lib_create}
 \usage{
-perlbrew_lib_create(root = Sys.getenv("PERLBREW_ROOT", unset = NA),
-  version = NULL, lib = NULL)
+perlbrew_lib_create(root = perlbrewr_perlbrew_root(), version = NULL,
+  lib = NULL)
 }
 \arguments{
 \item{root}{PERLBREW_ROOT}

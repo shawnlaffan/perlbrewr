@@ -4,8 +4,7 @@
 \alias{perlbrew}
 \title{perlbrew}
 \usage{
-perlbrew(root = Sys.getenv("PERLBREW_ROOT", unset = NA), version = NULL,
-  lib = NULL)
+perlbrew(root = perlbrewr_perlbrew_root(), version = NULL, lib = NULL)
 }
 \arguments{
 \item{root}{PERLBREW_ROOT}
