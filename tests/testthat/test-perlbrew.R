@@ -115,6 +115,8 @@ test_that("creating libraries", {
     expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
     brew_list <- perlbrew_list()
     expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@example"))
+    brew_list <- perlbrew_list(include.libs = FALSE)
+    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0"))
   })
 })
 

@@ -1,0 +1,73 @@
+---
+title: "Template Title"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: github_document
+params:
+  perlbrew_root: !r Sys.getenv("PERLBREW_ROOT")
+  perl_version: 5.26.0
+---
+
+```{r setup, include=FALSE}
+library(perlbrewr)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = "#>"
+)
+perlbrew(root = params$perlbrew_root, version = params$perl_version)
+```
+
+## Installed perls
+
+```{r}
+perlbrew_list(root = params$perlbrew_root, include.libs = FALSE)
+```
+
+
+## Some perl code
+
+Perl code can now be written that uses the specific interpreter with version
+``r params$perl_version`` as part of the perlbrew installation in
+``r params$perlbrew_root``.
+
+```{r perl-test, engine = "perl"}
+use strict;
+use warnings;
+use feature 'say';
+say "Hello World";
+say "perl is: $^X";
+```
+
+
+## Using a library for analysis
+
+A [`local::lib`](https://metacpan.org/pod/local::lib) is easily created to
+allow for user level installation and enhance reproducibility of a workflow
+by using a [`cpanfile`](https://metacpan.org/pod/cpanfile) to install
+dependencies with [`cpanm`](https://metacpan.org/pod/cpanm).
+
+```{r perl-library}
+success <- perlbrew_lib_create(root = params$perlbrew_root,
+                               version = params$perl_version,
+                               lib = "template",
+                               perlbrew.use = TRUE)
+available <- perlbrew_list(root = params$perlbrew_root)
+attr(available, "active")
+```
+
+Knitr has already been updated to use the `PERL5LIB` by setting `engine.opts`.
+
+* ``r knitr::opts_chunk$get("engine.opts")$perl``
+
+Chunks interpreted with Bash will also have the correct environment to do what
+I mean (DWIM).
+```{r command-line, engine = "bash"}
+which perl
+which cpanm
+echo $PERL5LIB
+```
+
+In this way any perl scripts that have dependencies, may have these
+dependencies met by using `cpanm` to install the modules from
+[CPAN](https://metacpan.org) using the `cpanfile` that was included with the
+script :tada:.

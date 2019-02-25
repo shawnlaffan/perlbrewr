@@ -21,18 +21,29 @@ perlbrew <- function(root = perlbrewr_perlbrew_root(),
 #' @param root PERLBREW_ROOT
 #' @param version perl version
 #' @param lib new local lib name
+#' @param perlbrew.use switch to the new library.
 #'
 #' @return Boolean TRUE for success
 #' @export
 perlbrew_lib_create <- function(root = perlbrewr_perlbrew_root(),
-                                version = NULL, lib = NULL) {
+                                version = NULL, lib = NULL,
+                                perlbrew.use = FALSE) {
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
   lib_name <- perlbrew_id(version, lib)
+  current_list <- perlbrew_list(root = root)
+  if(any(grepl(pattern = lib_name, current_list))) {
+    if(perlbrew.use) { return(perlbrew(root, version, lib)) }
+    return(TRUE)
+  }
   res <- run_perlbrew_command(paste0("${perlbrew_command:-perlbrew} lib create ", lib_name))
   status <- attr(res, "status")
   if(is.null(status)) {
     expected <- paste0(lib_name, "' is created")
-    return(all(grepl(x = res, pattern = expected)))
+    success <- all(grepl(x = res, pattern = expected))
+    if(success && perlbrew.use) {
+      success <- perlbrew(root, version, lib)
+    }
+    return(success)
   }
   return(FALSE)
 }
@@ -40,10 +51,11 @@ perlbrew_lib_create <- function(root = perlbrewr_perlbrew_root(),
 #' perlbrew_list
 #'
 #' @param root PERLBREW_ROOT
+#' @param include.libs whether to include local::lib libraries in output
 #'
 #' @return character vector
 #' @export
-perlbrew_list <- function(root = perlbrewr_perlbrew_root()) {
+perlbrew_list <- function(root = perlbrewr_perlbrew_root(), include.libs = TRUE) {
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
 
   perls_libs <- run_perlbrew_command("${perlbrew_command:-perlbrew} list; ")
@@ -56,7 +68,12 @@ perlbrew_list <- function(root = perlbrewr_perlbrew_root()) {
   active <- grepl(perls_libs, pattern = "^\\* ")
   perls_libs <- perls_libs %>%
     gsub(pattern = "^(\\*| ) ", replacement = "")
-  attr(perls_libs, "active") <- perls_libs[active]
+  active_brew <- perls_libs[active]
+  if (!include.libs) {
+    perls_libs <- perls_libs[!grepl(pattern = "@", perls_libs)]
+  }
+  attr(perls_libs, "active") <- active_brew
+
   return(perls_libs)
 }
 
