@@ -5,7 +5,7 @@
 \title{perlbrew_lib_create}
 \usage{
 perlbrew_lib_create(root = perlbrewr_perlbrew_root(), version = NULL,
-  lib = NULL)
+  lib = NULL, perlbrew.use = FALSE)
 }
 \arguments{
 \item{root}{PERLBREW_ROOT}
@@ -13,6 +13,8 @@ perlbrew_lib_create(root = perlbrewr_perlbrew_root(), version = NULL,
 \item{version}{perl version}
 
 \item{lib}{new local lib name}
+
+\item{perlbrew.use}{switch to the new library.}
 }
 \value{
 Boolean TRUE for success

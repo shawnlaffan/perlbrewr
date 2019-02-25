@@ -4,10 +4,12 @@
 \alias{perlbrew_list}
 \title{perlbrew_list}
 \usage{
-perlbrew_list(root = perlbrewr_perlbrew_root())
+perlbrew_list(root = perlbrewr_perlbrew_root(), include.libs = TRUE)
 }
 \arguments{
 \item{root}{PERLBREW_ROOT}
+
+\item{include.libs}{whether to include local::lib libraries in output}
 }
 \value{
 character vector
