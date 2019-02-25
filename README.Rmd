@@ -72,7 +72,7 @@ This is also the case in `bash` shell blocks.
 which perl
 ```
 
-By configuring `knitr`
+By configuring `knitr` - this happens automatically by default.
 ```{r knitr-config}
 knitr::opts_chunk$set(engine.path = list(perl = Sys.which("perl")[["perl"]]))
 ```
@@ -134,3 +134,10 @@ perlbrew_lib_create(version = "5.24.0", lib = "foobar")
 perlbrew_list()
 ```
 
+### knitr
+
+The knitr chunk options `engine.path` and `engine.opts` are set automatically so that each `engine="perl"` chunk will use the correct `perl` interpreter and `PERL5LIB`. Any `engine.opts` for perl that have already been set should remain in the list. For this to work correctly the `list()` version of the `engine.opts` should be used. i.e.
+
+```r
+knitr::opts_chunk$set(engine.opts = list(perl = "-CS", bash = "--norc"))
+```

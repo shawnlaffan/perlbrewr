@@ -55,7 +55,7 @@ which perl
 #> /software/programming/perlbrew-0.76/perls/perl-5.24.0/bin/perl
 ```
 
-By configuring `knitr`
+By configuring `knitr` - this happens automatically by default.
 
 ``` r
 knitr::opts_chunk$set(engine.path = list(perl = Sys.which("perl")[["perl"]]))
@@ -76,7 +76,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpeRsI5B/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/RtmpfeCTTa/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
@@ -117,4 +117,12 @@ perlbrew_list()
 #> [4] "perl-5.26.0"        
 #> attr(,"active")
 #> [1] "perl-5.24.0@example"
+```
+
+### knitr
+
+The knitr chunk options `engine.path` and `engine.opts` are set automatically so that each `engine="perl"` chunk will use the correct `perl` interpreter and `PERL5LIB`. Any `engine.opts` for perl that have already been set should remain in the list. For this to work correctly the `list()` version of the `engine.opts` should be used. i.e.
+
+``` r
+knitr::opts_chunk$set(engine.opts = list(perl = "-CS", bash = "--norc"))
 ```
