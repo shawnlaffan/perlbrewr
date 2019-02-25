@@ -1,5 +1,5 @@
 
-[![Travis build status](https://travis-ci.org/kiwiroy/perlbrewr.svg?branch=master)](https://travis-ci.org/kiwiroy/perlbrewr) [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Travis build status](https://travis-ci.org/kiwiroy/perlbrewr.svg?branch=master)](https://travis-ci.org/kiwiroy/perlbrewr) [![Coverage status](https://coveralls.io/repos/github/kiwiroy/perlbrewr/badge.svg)](https://coveralls.io/r/kiwiroy/perlbrewr?branch=master) [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!--   home: !r Sys.getenv("PERLBREW_HOME") -->
@@ -76,7 +76,7 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpfeCTTa/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/RtmpmvJg07/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).

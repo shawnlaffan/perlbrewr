@@ -14,11 +14,15 @@ r:
 
 env:
   global:
-    - CI_NAME=travis-pro
+    - CI_NAME=travis
     - PERLBREW_ROOT=/home/travis/perl5/perlbrew
     - NOT_CRAN=true
 
 before_install: echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.Rprofile
+
+after_success:
+  - export CI_BRANCH=$TRAVIS_BRANCH
+  - test $TRAVIS_R_VERSION_STRING = "release" && Rscript -e 'covr::coveralls()'
 
 before_deploy:
 #  - which perlbrew
