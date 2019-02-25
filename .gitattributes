@@ -1,0 +1,2 @@
+inst/perlbrew/* linguist-vendored
+tests/testthat/mock/* linguist-vendored
