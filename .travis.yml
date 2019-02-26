@@ -7,6 +7,9 @@ cache: packages
 r_packages:
   - pkgdown
 
+r_github_packages:
+  - r-lib/covr
+
 r:
   - oldrel
   - release
@@ -14,7 +17,6 @@ r:
 
 env:
   global:
-    - CI_NAME=travis
     - PERLBREW_ROOT=/home/travis/perl5/perlbrew
     - NOT_CRAN=true
 
@@ -22,6 +24,7 @@ before_install: echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.R
 
 after_success:
   - export CI_BRANCH=$TRAVIS_BRANCH
+  - export CI_NAME=travis
   - test $TRAVIS_R_VERSION_STRING = "release" && Rscript -e 'covr::coveralls()'
 
 before_deploy:
