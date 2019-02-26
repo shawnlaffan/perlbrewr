@@ -24,7 +24,7 @@ before_install: echo "options(repos = c(CRAN='http://cran.rstudio.com'))" > ~/.R
 
 after_success:
   - export CI_BRANCH=$TRAVIS_BRANCH
-  - export CI_NAME=travis
+  - export CI_NAME=travis-ci
   - test $TRAVIS_R_VERSION_STRING = "release" && Rscript -e 'covr::coveralls()'
 
 before_deploy:
