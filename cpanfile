@@ -1,1 +1,1 @@
-requires "Mojolicious" => 8.0;
+requires "Mojolicious" => '8.0';

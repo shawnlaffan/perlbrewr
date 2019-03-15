@@ -157,6 +157,9 @@ is_valid_root <- function(root) {
   if (!file_test("-x", file.path(root, "bin", "perlbrew"))) { return(FALSE) }
   if (!dir.exists(file.path(root, "etc")))                  { return(FALSE) }
   if (!file_test("-f", file.path(root, "etc", "bashrc")))   { return(FALSE) }
+  if (Sys.getenv("PERLBREW_ROOT", unset = "") != root) {
+    Sys.setenv("PERLBREW_ROOT"=root)
+  }
   return(TRUE)
 }
 
