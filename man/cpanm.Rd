@@ -2,10 +2,13 @@
 % Please edit documentation in R/cpanm.R
 \name{cpanm}
 \alias{cpanm}
+\alias{cpanm_installdeps}
 \title{cpanm}
 \usage{
 cpanm(installdeps = FALSE, test = TRUE, quiet = TRUE,
   cpanfile = ".")
+
+cpanm_installdeps(cpanfile = ".")
 }
 \arguments{
 \item{installdeps}{Boolean to use --installdeps}
@@ -14,11 +17,13 @@ cpanm(installdeps = FALSE, test = TRUE, quiet = TRUE,
 
 \item{quiet}{Boolean to run in quiet mode}
 
-\item{cpanfile}{THe cpanfile to use}
+\item{cpanfile}{The cpanfile to use}
 }
 \value{
-string
+Boolean TRUE for success
 }
 \description{
 cpanm
+
+cpanm_installdeps
 }

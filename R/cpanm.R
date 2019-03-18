@@ -4,20 +4,20 @@
 #' @param installdeps Boolean to use --installdeps
 #' @param test Boolean to test install
 #' @param quiet Boolean to run in quiet mode
-#' @param cpanfile THe cpanfile to use
+#' @param cpanfile The cpanfile to use
 #'
-#' @return string
+#' @return Boolean TRUE for success
 #' @export
-cpanm <- function(installdeps = FALSE, test = TRUE, quiet = TRUE, cpanfile = ".")
-{
+#' @rdname cpanm
+cpanm <- function(installdeps = FALSE, test = TRUE, quiet = TRUE, cpanfile = ".") {
   root <- Sys.getenv("PERLBREW_ROOT", unset = NA)
   if(!is_valid_root(root)){ stop("root argument is not valid", call. = FALSE) }
 
-  command <- "cpanm"
-  if (Sys.which(command)[[command]] == "") {
+  if (cpanm_is_installed() == FALSE) {
     warning("cpanm command not available")
     return(FALSE)
   }
+  command <- "cpanm"
   if (installdeps)   { command <- c(command, "--installdeps") }
   if (test == FALSE) { command <- c(command, "-n") }
   if (quiet == TRUE) { command <- c(command, "-q") }
@@ -43,7 +43,40 @@ cpanm <- function(installdeps = FALSE, test = TRUE, quiet = TRUE, cpanfile = "."
   return(FALSE)
 }
 
-cpanm_installdeps <- function(cpanfile = ".")
-{
+#' cpanm_installdeps
+#'
+#' @export
+#' @rdname cpanm
+cpanm_installdeps <- function(cpanfile = ".") {
   cpanm(installdeps = TRUE, test = FALSE, quiet = TRUE, cpanfile = cpanfile)
+}
+
+#' perlbrew_install_cpanm
+#'
+#' @param force Boolean to force an install/upgrade
+#'
+#' @return Boolean TRUE for success
+#' @export
+perlbrew_install_cpanm <- function(force = FALSE) {
+  if (cpanm_is_installed()) {
+    if (force == FALSE) return(TRUE)
+  }
+
+  perlbrew_cmd <- "${perlbrew_command:-perlbrew} install-cpanm -f; "
+  installed  <- run_perlbrew_command(perlbrew_cmd = perlbrew_cmd)
+  status     <- attr(installed, "status")
+
+  if(is.null(status)) {
+    return(TRUE)
+  }
+
+  return(FALSE)
+}
+
+cpanm_is_installed <- function() {
+  command <- "cpanm"
+  if (Sys.which(command)[[command]] == "") {
+    return(FALSE)
+  }
+  return(TRUE)
 }
