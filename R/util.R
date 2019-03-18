@@ -1,10 +1,10 @@
-is_windows <- function() {
-  identical(.Platform$OS.type, "windows")
-}
-
-is_osx <- function() {
-  Sys.info()["sysname"] == "Darwin"
-}
+# is_windows <- function() {
+#   identical(.Platform$OS.type, "windows")
+# }
+#
+# is_osx <- function() {
+#   Sys.info()["sysname"] == "Darwin"
+# }
 
 perlbrewr_system_file <- function(...) {
   system.file(..., package = "perlbrewr")
@@ -40,9 +40,9 @@ perlbrewr_perlbrew_command <- function() {
 
 # file.path(path.expand("~"), ".perlbrew")
 # file.path(here(), ".perlbrew")
-perlbrewr_perlbrew_home <- function() {
-  file.path(perlbrewr_perlbrew_root(), ".perlbrew")
-}
+# perlbrewr_perlbrew_home <- function() {
+#   file.path(perlbrewr_perlbrew_root(), ".perlbrew")
+# }
 
 #
 # perlbrewr_environment <- new.env()
