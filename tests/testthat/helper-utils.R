@@ -25,3 +25,13 @@ perlbrew_free_path <- function(mock_root = "") {
   sys_path <- paste0(sys_path, collapse = ":")
   return(sys_path)
 }
+
+# covr installs the package into tmp without files listed in .Rbuildignore
+project_srcdir <- function() {
+  if (Sys.getenv("R_COVR", unset = "false") == "true") {
+    proj_root <- Sys.getenv("R_COVR_SRCDIR")
+  } else {
+    proj_root <- here::here()
+  }
+  proj_root
+}

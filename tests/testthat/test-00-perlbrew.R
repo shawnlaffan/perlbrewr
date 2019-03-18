@@ -56,6 +56,7 @@ test_that("brewing", {
     expect_equal(Sys.getenv("PERLBREW_LIB"), "random",
                  label = "library var set")
     expect_perl(regexp = "mock/perls/perl-5.26.0/bin/perl$")
+    expect_match(Sys.getenv("PERL5LIB"), "libs/perl-5\\.26\\.0@random/lib/perl5$")
 
     brew_list <- perlbrew_list()
     expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
