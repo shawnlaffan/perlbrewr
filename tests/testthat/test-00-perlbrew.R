@@ -13,6 +13,7 @@ test_that("correctly initialised - sanity check", {
 test_that("list", {
   brew_list <- perlbrew_list()
   expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
+  expect_error(perlbrew_list(root = NA), "root argument is not valid")
 })
 
 test_that("brewing", {
@@ -118,6 +119,10 @@ test_that("creating libraries", {
     expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@example"))
     brew_list <- perlbrew_list(include.libs = FALSE)
     expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0"))
+    ## should still return true
+    expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
+    ## false when the perl does not exist
+    expect_false(perlbrew_lib_create(version = "5.9.0", lib = "example"))
   })
 })
 
