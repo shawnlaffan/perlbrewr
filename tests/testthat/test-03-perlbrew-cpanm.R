@@ -18,6 +18,7 @@ skip_if_offline <- function(host = "r-project.org") {
 }
 
 test_that("without install", {
+  skip_on_travis()
   unlink_cpanm()
   expect_warning(cpanm(), "cpanm command not available")
 })
@@ -32,11 +33,13 @@ test_that("install cpanm - mock does not have it", {
   expect_true(installed, label = "install with force")
 })
 
+test_that("no cpanfile", {
+  expect_warning(cpanm(), "A cpanfile does not exist at .")
+})
+
 test_that("install dependencies", {
   skip_if_offline()
   skip_if_not_installed("here")
-
-  proj_root <- here::here()
 
   lib <- paste0(sample(letters, 8), collapse = "")
   perls <- perlbrew_list()
@@ -53,6 +56,8 @@ test_that("install dependencies", {
     sys_path <- sys_path[!grepl(sys_path, pattern = "/perl\\-5\\.[^/]*/bin")]
     sys_path <- paste0(sys_path, collapse = ":")
     Sys.setenv("PATH"=sys_path)
+
+    proj_root <- here::here()
 
     installed <- cpanm_installdeps(cpanfile = file.path(proj_root, "cpanfile"))
     expect_true(installed)
