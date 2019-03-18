@@ -133,10 +133,7 @@ test_that("error conditions", {
 
 test_that("edge cases", {
   mock_root <- Sys.getenv("PERLBREW_ROOT", unset = "/fail/")
-  sys_path <- unlist(strsplit(Sys.getenv("PATH"), split = ":"))
-  sys_path <- sys_path[!grepl(sys_path, pattern = mock_root)]
-  sys_path <- sys_path[!grepl(sys_path, pattern = "/perlbrew[^/]*/bin")]
-  sys_path <- paste0(sys_path, collapse = ":")
+  sys_path <- perlbrew_free_path(mock_root)
 
   no_perlbrew <- list(
     PERLBREW_ROOT=NA,
@@ -157,19 +154,33 @@ test_that("edge cases", {
                      "Using bundled perlbrew root from perlbrewr package.")
     })
   })
+})
 
+test_that("if it looks like a duck, quacks like a duck, ...", {
+  mock_root <- Sys.getenv("PERLBREW_ROOT", unset = "/fail/")
+  sys_path <- perlbrew_free_path(mock_root)
+
+  no_perlbrew <- list(
+    PERLBREW_ROOT=NA,
+    PERLBREW_HOME=NA,
+    perlbrew_command=NA,
+    PATH=sys_path)
+  ## long winded possibly
   withr::with_envvar(new = no_perlbrew, code = {
+    ## create a new temp perlbrew root
     tmp_root <- file.path(tempdir(), "perlbrew")
     dir.create(file.path(tmp_root, "bin"), recursive = TRUE)
     file.copy(file.path(mock_root, "bin", "perlbrew"),
               file.path(tmp_root, "bin", "perlbrew"),
               copy.mode = TRUE)
     tmp_vars <- init_mock(tmp_root)
+
+    ## refer to this root and test a list still possible
     withr::with_envvar(
       new = list(PERLBREW_ROOT=NA, PERLBREW_HOME=NA, perlbrew_command=NA),
       code = {
-        expect_error(perlbrew_list(tmp_vars$PERLBREW_ROOT),
-                     "error in running command")
+        listing <- perlbrew_list(tmp_vars$PERLBREW_ROOT)
+        expect_gt(length(listing), 1, label = "listing occurred")
       })
   })
 

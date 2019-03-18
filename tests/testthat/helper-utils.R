@@ -13,3 +13,15 @@ warn_perlbrew_envvars <- function () {
 which_perl <- function() {
   path <- Sys.which("perl")[["perl"]]
 }
+
+perlbrew_free_path <- function(mock_root = "") {
+  ## get current PATH
+  sys_path <- unlist(strsplit(Sys.getenv("PATH"), split = ":"))
+  ## filter mock_root
+  sys_path <- sys_path[!grepl(sys_path, pattern = mock_root)]
+  ## filter any perlbrew*/bin path
+  sys_path <- sys_path[!grepl(sys_path, pattern = "/perlbrew[^/]*/bin")]
+  ## reconstitute
+  sys_path <- paste0(sys_path, collapse = ":")
+  return(sys_path)
+}
