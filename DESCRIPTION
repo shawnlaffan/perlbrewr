@@ -15,7 +15,9 @@ LazyData: true
 Suggests:
     testthat,
     withr,
-    rmarkdown
+    rmarkdown,
+    curl,
+    here
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 URL: https://github.com/kiwiroy/perlbrewr
