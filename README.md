@@ -76,14 +76,15 @@ Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries 
 perlbrew(version = "5.24.0", lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/RtmpmvJg07/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/Rtmp9zMkiF/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
 
 ``` bash
+cd inst
 cpanm -n -q --installdeps .
-#> Successfully installed Mojolicious-8.12
+#> Successfully installed Mojolicious-8.13
 #> 1 distribution installed
 ```
 
@@ -92,8 +93,8 @@ Since `perlbrewr::perlbrew` sets the `PERL5LIB` environment variable perl code r
 ``` perl
 use Mojo::Base -strict;
 use Mojo::File;
-say Mojo::File->new('cpanfile')->slurp;
-#> requires "Mojolicious" => 8.0;
+say Mojo::File->new('inst/cpanfile')->slurp;
+#> requires "Mojolicious" => '8.0';
 ```
 
 ### listing and creating libraries

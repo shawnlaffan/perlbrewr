@@ -98,6 +98,7 @@ Sys.getenv("PERL5LIB")
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
 ```{r install-something, engine = "bash"}
+cd inst
 cpanm -n -q --installdeps .
 ```
 
@@ -107,7 +108,7 @@ relying on the dependencies is now sucessful.
 ```{r perl-code-2, engine = "perl"}
 use Mojo::Base -strict;
 use Mojo::File;
-say Mojo::File->new('cpanfile')->slurp;
+say Mojo::File->new('inst/cpanfile')->slurp;
 ```
 
 ### listing and creating libraries
