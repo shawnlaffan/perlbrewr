@@ -6,11 +6,13 @@ Authors@R: c(
 Description: The goal of perlbrewr is to assist the loading of a perlbrew 
   perl and optionally a library with the aim of improving reproducibility.
 Depends: R (>= 3.3.0)
-Imports: knitr (>= 1.21),
+Imports: devtools,
+  knitr (>= 1.21),
   magrittr,
   remotes,
   rlang,
-  stringr
+  stringr,
+  utils
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

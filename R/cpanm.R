@@ -28,6 +28,7 @@ cpanm <- function(installdeps = FALSE, test = TRUE, quiet = TRUE, dist = ".") {
   }
 
   command <- paste(c(command, dist), collapse = " ")
+  warning(command)
   res <- system(command, intern = TRUE)
   status <- attr(res, "status")
   if (is.null(status)) {
@@ -78,7 +79,9 @@ perlbrew_install_cpanm <- function(force = FALSE) {
 #' @return Boolean
 #' @export
 #' @importFrom remotes parse_github_repo_spec
-#' @importFrom rlang %||%
+#' @import rlang
+#' @import devtools
+#' @import utils
 cpanm_install_github <- function(repo, test = FALSE, quiet = TRUE) {
   meta <- tryCatch(expr = remotes::parse_github_repo_spec(repo), error = function(e) e)
   if (inherits(meta, "simpleError")) {

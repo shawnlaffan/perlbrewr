@@ -25,6 +25,9 @@ as.perl_vversion <- function(vstring = "5.26.0") {
 
 init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
 {
+  if (dir.exists(file.path(perlbrew_root, ".perlbrew"))) {
+    unlink(file.path(perlbrew_root, ".perlbrew"), recursive = TRUE)
+  }
   required_envvars <-
     list("PERLBREW_ROOT"    = perlbrew_root,
          "PERLBREW_HOME"    = file.path(perlbrew_root, ".perlbrew"),

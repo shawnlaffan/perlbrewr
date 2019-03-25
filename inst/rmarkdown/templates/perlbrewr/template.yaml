@@ -1,4 +1,4 @@
 name: perlbrewr
 description: >
    lightweight template for using perlbrew in rmarkdown
-create_dir: FALSE
+create_dir: TRUE

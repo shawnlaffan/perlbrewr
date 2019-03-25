@@ -1,4 +1,4 @@
-context("perlbrew-cpanm")
+context("perlbrew cpanm")
 
 unlink_cpanm <- function() {
   root <- file.path(project_srcdir(), "tests", "testthat", "mock")
@@ -65,8 +65,8 @@ test_that("install dependencies", {
       ## only install pure perl and expect to run!
       Sys.setenv("PATH"=filter_path(sys_path))
 
-      proj_root <- project_srcdir()
-      installed <- cpanm_installdeps(cpanfile = file.path(proj_root, "cpanfile"))
+      cpanfile <- system.file("cpanfile", package = "perlbrewr")
+      installed <- cpanm_installdeps(cpanfile = cpanfile)
       expect_true(installed, label = "cpanm_installdeps ok")
       lib_files <-
         list.files(file.path(tmp_home, "libs", perlbrew_id(perl, lib)),

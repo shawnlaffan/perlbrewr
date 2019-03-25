@@ -1,6 +1,6 @@
 ---
 title: "Template Title"
-author: "Your Name"
+author: "`r whoami::fullname()`"
 date: "`r Sys.Date()`"
 output: github_document
 params:
