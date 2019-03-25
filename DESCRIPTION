@@ -21,7 +21,8 @@ Suggests:
     withr,
     rmarkdown,
     curl,
-    here
+    here,
+    whoami
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 URL: https://github.com/kiwiroy/perlbrewr
