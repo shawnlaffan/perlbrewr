@@ -8,6 +8,8 @@ Description: The goal of perlbrewr is to assist the loading of a perlbrew
 Depends: R (>= 3.3.0)
 Imports: knitr (>= 1.21),
   magrittr,
+  remotes,
+  rlang,
   stringr
 License: MIT + file LICENSE
 Encoding: UTF-8

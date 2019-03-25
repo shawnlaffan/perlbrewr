@@ -122,7 +122,8 @@ test_that("creating libraries", {
     ## should still return true
     expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
     ## false when the perl does not exist
-    expect_false(perlbrew_lib_create(version = "5.9.0", lib = "example"))
+    expect_warning(expect_false(perlbrew_lib_create(version = "5.9.0", lib = "example")),
+                   "running command")
   })
 })
 

@@ -5,8 +5,7 @@
 \alias{cpanm_installdeps}
 \title{cpanm}
 \usage{
-cpanm(installdeps = FALSE, test = TRUE, quiet = TRUE,
-  cpanfile = ".")
+cpanm(installdeps = FALSE, test = TRUE, quiet = TRUE, dist = ".")
 
 cpanm_installdeps(cpanfile = ".")
 }
@@ -17,7 +16,9 @@ cpanm_installdeps(cpanfile = ".")
 
 \item{quiet}{Boolean to run in quiet mode}
 
-\item{cpanfile}{The cpanfile to use}
+\item{dist}{The directory to find a cpanfile, or an arhive file to use}
+
+\item{cpanfile}{Path to cpanfile or a directory to find one}
 }
 \value{
 Boolean TRUE for success
