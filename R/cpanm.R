@@ -28,7 +28,6 @@ cpanm <- function(installdeps = FALSE, test = TRUE, quiet = TRUE, dist = ".") {
   }
 
   command <- paste(c(command, dist), collapse = " ")
-  warning(command)
   res <- system(command, intern = TRUE)
   status <- attr(res, "status")
   if (is.null(status)) {
