@@ -80,7 +80,9 @@ shellwords <- function(x) {
    )
   )"
   xo <- str_match_all(string = x, pattern = shellwords_re)
-
+  if (length(xo) == 0) {
+    return(character(0))
+  }
   for (i in seq_along(xo[[1]][,1])) {
     xo[[1]][i,7] <- NA
     if(!is.na(xo[[1]][i,6]) && xo[[1]][i,6] != "") {

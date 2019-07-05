@@ -35,9 +35,11 @@ Example
 
 This is a basic example of usage to load a perlbrew environment:
 
+`params$perl_version` = `5.24.0`
+
 ``` r
 library(perlbrewr)
-result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = "5.24.0")
+result <- perlbrew(root = Sys.getenv("PERLBREW_ROOT"), version = params$perl_version)
 ```
 
 The brewed version of perl is now the default.
@@ -73,10 +75,10 @@ print "$^X\n";
 Perlbrew supports [`local::lib`](https://metacpan.org/pod/local::lib) libraries for further controlling which modules are installed. `perlbrewr` supports loading these also.
 
 ``` r
-perlbrew(version = "5.24.0", lib = "example")
+perlbrew(version = params$perl_version, lib = "example")
 #> [1] TRUE
 Sys.getenv("PERL5LIB")
-#> [1] "/tmp/Rtmp9zMkiF/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
+#> [1] "/tmp/Rtmp8L1Tdz/.perlbrew/libs/perl-5.24.0@example/lib/perl5"
 ```
 
 Within this `local::lib` modules may be installed with [`cpanm`](https://metacpan.org/pod/App::cpanminus).
@@ -84,7 +86,7 @@ Within this `local::lib` modules may be installed with [`cpanm`](https://metacpa
 ``` bash
 cd inst
 cpanm -n -q --installdeps .
-#> Successfully installed Mojolicious-8.13
+#> Successfully installed Mojolicious-8.18
 #> 1 distribution installed
 ```
 
@@ -111,11 +113,8 @@ perlbrew_list()
 A new library is created with `perlbrew_lib_create`.
 
 ``` r
-perlbrew_lib_create(version = "5.24.0", lib = "foobar")
-#> [1] TRUE
 perlbrew_list()
-#> [1] "perl-5.24.0"         "perl-5.24.0@example" "perl-5.24.0@foobar" 
-#> [4] "perl-5.26.0"        
+#> [1] "perl-5.24.0"         "perl-5.24.0@example" "perl-5.26.0"        
 #> attr(,"active")
 #> [1] "perl-5.24.0@example"
 ```

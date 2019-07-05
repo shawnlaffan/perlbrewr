@@ -30,9 +30,9 @@ after_success:
   - test $TRAVIS_R_VERSION_STRING = "release" && Rscript -e 'Sys.setenv("R_COVR_SRCDIR"=here::here()); covr::coveralls()'
 
 before_deploy:
-#  - which perlbrew
-#  - which cpanm
-#  - perlbrew list
+  - which perlbrew
+  - which cpanm
+  - perlbrew list
   - Rscript -e 'withr::with_temp_libpaths(action = "prefix", code = { devtools::install(pkg = ".", reload = FALSE); pkgdown::build_site(pkg = "."); })'
   - touch gh-pages/.nojekyll
 
