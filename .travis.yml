@@ -1,7 +1,8 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
-sudo: false
+language: r
+os: linux
+dist: xenial
 cache: packages
 
 r_packages:
@@ -39,12 +40,12 @@ before_deploy:
 notifications:
   email: false
 deploy:
+  strategy: git
   provider: pages
-  skip_cleanup: true
   keep_history: true
-  local-dir: gh-pages
-  target-branch: gh-pages
-  committer-from-gh: true
+  local_dir: gh-pages
+  target_branch: gh-pages
+  committer_from_gh: true
   github_token: $GITHUB_PAT
   on:
     branch: master
