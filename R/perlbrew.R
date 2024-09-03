@@ -65,6 +65,7 @@ perlbrew_list <- function(root = perlbrewr_perlbrew_root(), include.libs = TRUE)
     return(c())
   }
 
+  perls_libs = trimws(perls_libs)
   active <- grepl(perls_libs, pattern = "^\\* ")
   perls_libs <- perls_libs %>%
     gsub(pattern = "^(\\*| ) ", replacement = "")
