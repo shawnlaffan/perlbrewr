@@ -17,11 +17,13 @@ filter_path <- function(sys_path) {
   sys_path
 }
 
-test_that("without install", {
-  withr::with_envvar(new = list(PATH="/bin"), code = {
-    expect_warning(cpanm(), "cpanm command not available")
+if (!file.exists("/bin/cpanm")) {
+  test_that("without install", {
+    withr::with_envvar(new = list(PATH="/bin"), code = {
+      expect_warning(cpanm(), "cpanm command not available")
+    })
   })
-})
+}
 
 test_that("install cpanm - mock does not have it", {
   skip_if_offline()
@@ -74,6 +76,9 @@ test_that("install dependencies", {
                    pattern = "\\.pm$")
       expect_true(any(grepl(lib_files, pattern = "/Mojo/Base\\.pm$")),
                   label = "Mojo::Base.pm installed")
+      #  debug
+      # expect_equal(grep(lib_files, pattern = "\\.pm$", value = TRUE), c(),
+                  # label = "Base.pm installed")
 
       lines <- system("perl -MMojo::Base=-strict -lE 'say 1'", intern = TRUE)
       expect_equal(lines, "1")
