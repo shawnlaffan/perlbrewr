@@ -132,9 +132,13 @@ test_that("error conditions", {
   expect_error(perlbrew(),
                regexp = "version argument is not valid")
   ## TODO: improve interface here.
-  expect_warning({ result <- perlbrew(version = "4.10.0") },
+  expect_warning (
+    expect_warning({ result <- perlbrew(version = "4.10.0") },
                  regexp = "ERROR: The installation \"4.10.0\" is unknown",
-                 label = "bad version number")
+                 label = "bad version number"),
+      regexp = "status 255",
+      label = "status 255"
+    )
   expect_false(result, label = "returned false")
 })
 
@@ -149,16 +153,25 @@ test_that("edge cases", {
     PATH=sys_path)
 
   withr::with_envvar(new = no_perlbrew, code = {
-    expect_error(perlbrew(), regexp = "root argument is not valid")
+    expect_error(perlbrew(), regexp = "root argument is not valid", label = "perlbrew no args")
     expect_error(perlbrew(root = "/unknown/directory/path"),
-                 regexp = "root argument is not valid")
-    expect_error(perlbrew_list(), regexp = "root argument is not valid")
+                 regexp = "root argument is not valid",
+                 label = "perlbrew with path /unknown/directory/path")
+    expect_error(perlbrew_list(), regexp = "root argument is not valid", label = "perlbrew_list no args")
     expect_error(perlbrew_list(root = "/unknown/directory/path"),
-                 regexp = "root argument is not valid")
+                 regexp = "root argument is not valid",
+                 label  = "perlbrew_list with path /unknown/directory/path")
 
     withr::with_options(new = list("perlbrewr.use_bundled"=TRUE), code = {
-      expect_warning(expect_error(perlbrew(), regexp = "version argument is not valid"),
-                     "Using bundled perlbrew root from perlbrewr package.")
+      expect_error(
+        expect_error(
+          perlbrew(),
+          regexp = "version argument is not valid",
+          label = "version argument is not valid"
+        ),
+        regexp = "root argument is not valid",
+        label  = "root argument is not valid"
+      )
     })
   })
 })
@@ -176,7 +189,10 @@ test_that("if it looks like a duck, quacks like a duck, ...", {
   withr::with_envvar(new = no_perlbrew, code = {
     ## create a new temp perlbrew root
     tmp_root <- file.path(tempdir(), "perlbrew")
-    dir.create(file.path(tmp_root, "bin"), recursive = TRUE)
+    d = file.path(tmp_root, "bin")
+    if (!dir.exists (d)) {
+      dir.create(d, recursive = TRUE)
+    }
     file.copy(file.path(mock_root, "bin", "perlbrew"),
               file.path(tmp_root, "bin", "perlbrew"),
               copy.mode = TRUE)
