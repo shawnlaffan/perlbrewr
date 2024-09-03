@@ -1,4 +1,4 @@
-context("perlbrew cpanm")
+#context("perlbrew cpanm")
 
 unlink_cpanm <- function() {
   root <- file.path(project_srcdir(), "tests", "testthat", "mock")
