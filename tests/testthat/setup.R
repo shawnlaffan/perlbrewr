@@ -31,7 +31,8 @@ init_mock <- function(perlbrew_root = file.path(getwd(), "mock"))
   required_envvars <-
     list("PERLBREW_ROOT"    = perlbrew_root,
          "PERLBREW_HOME"    = file.path(perlbrew_root, ".perlbrew"),
-         "perlbrew_command" = file.path(perlbrew_root, "bin", "perlbrew"))
+         "perlbrew_command" = file.path(perlbrew_root, "bin", "perlbrew"),
+         "PERLBREW_PATH"    = file.path(perlbrew_root, "bin"))
   do.call("Sys.setenv", required_envvars)
   # initialise perlbrew from mock directory
   init <- system("perl ${perlbrew_command} init", intern = TRUE,
