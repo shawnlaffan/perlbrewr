@@ -1,4 +1,4 @@
-context("perlbrew")
+#context("perlbrew")
 
 library(withr)
 
@@ -11,8 +11,8 @@ test_that("correctly initialised - sanity check", {
 })
 
 test_that("list", {
-  brew_list <- perlbrew_list()
-  expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
+  brew_list <- perlbrew_list(root=Sys.getenv("PERLBREW_ROOT"))
+  expect_equal(sort(brew_list), sort(c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random")), ignore_attr=TRUE)
   expect_error(perlbrew_list(root = NA), "root argument is not valid")
 })
 
@@ -60,7 +60,7 @@ test_that("brewing", {
     expect_match(Sys.getenv("PERL5LIB"), "libs/perl-5\\.26\\.0@random/lib/perl5$")
 
     brew_list <- perlbrew_list()
-    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random"))
+    expect_equal(sort(brew_list), sort(c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@random")))
     expect_equal(attr(brew_list, "active"), c("perl-5.26.0@random"))
     expect_knitr_path_set(which_perl())
     expect_knitr_opts_match(Sys.getenv("PERL5LIB"))
@@ -116,9 +116,9 @@ test_that("creating libraries", {
   withr::with_envvar(new = c("PERLBREW_HOME" = tmp), code = {
     expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
     brew_list <- perlbrew_list()
-    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@example"))
+    expect_equal (sort(brew_list), sort (c("perl-5.24.0", "perl-5.26.0", "perl-5.26.0@example")))
     brew_list <- perlbrew_list(include.libs = FALSE)
-    expect_equivalent(brew_list, c("perl-5.24.0", "perl-5.26.0"))
+    expect_equal(sort(brew_list), sort(c("perl-5.24.0", "perl-5.26.0")))
     ## should still return true
     expect_true(perlbrew_lib_create(version = "5.26.0", lib = "example"))
     ## false when the perl does not exist
