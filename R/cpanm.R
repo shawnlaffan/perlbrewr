@@ -102,7 +102,7 @@ download_github <- function(repo, user, ref = "master"){
          username = user,
          ref      = ref,
          sha      = NULL,
-         auth_token = devtools::github_pat()),
+         ),
     class = c("github_remote", "remote"))
   fun <- getAnywhere("remote_download.github_remote")[1]
   dest <- fun(remote)
