@@ -17,7 +17,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests:
-    testthat,
+    testthat (>= 3.0.0),
     withr,
     rmarkdown,
     curl,
@@ -27,3 +27,4 @@ RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 URL: https://github.com/kiwiroy/perlbrewr
 BugReports: https://github.com/kiwiroy/perlbrewr/issues
+Config/testthat/edition: 3
