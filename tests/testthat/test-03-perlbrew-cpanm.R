@@ -17,13 +17,12 @@ filter_path <- function(sys_path) {
   sys_path
 }
 
-if (!file.exists("/bin/cpanm")) {
-  test_that("without install", {
-    withr::with_envvar(new = list(PATH="/bin"), code = {
-      expect_warning(cpanm(), "cpanm command not available")
-    })
+test_that("without install", {
+  skip_if (file.exists("/bin/cpanm"))
+  withr::with_envvar(new = list(PATH="/bin"), code = {
+    expect_warning(cpanm(), "cpanm command not available")
   })
-}
+})
 
 test_that("install cpanm - mock does not have it", {
   skip_if_offline()
@@ -50,7 +49,13 @@ test_that("install dependencies", {
 
   lib <- paste0(sample(letters, 8), collapse = "")
   perls <- perlbrew_list()
+  
+  #  some clunky filtering until we fix some things
+  perls = perls[perls != ""]
+  perls = grep (perls, pattern = '^ERROR', invert = TRUE, value = TRUE)
+  
   perl  <- perls[!grepl(perls, pattern = "@")][1]
+  #expect_equal (perls, c(), label = "DIAGNOSTIC")
   tmp_home <- file.path(tempdir(), paste0(sample(letters, 8), collapse = ""))
 
   expect_true(dir.create(tmp_home, recursive = TRUE), label = "create directory")
@@ -70,6 +75,7 @@ test_that("install dependencies", {
       cpanfile <- system.file("cpanfile", package = "perlbrewr")
       installed <- cpanm_installdeps(cpanfile = cpanfile)
       expect_true(installed, label = "cpanm_installdeps ok")
+      expect_equal (file.path(tmp_home, "libs", perlbrew_id(perl, lib)), "DIAGNOSTIC zob")
       lib_files <-
         list.files(file.path(tmp_home, "libs", perlbrew_id(perl, lib)),
                    recursive = TRUE, full.names = TRUE,
@@ -77,8 +83,8 @@ test_that("install dependencies", {
       expect_true(any(grepl(lib_files, pattern = "/Mojo/Base\\.pm$")),
                   label = "Mojo::Base.pm installed")
       #  debug
-      # expect_equal(grep(lib_files, pattern = "\\.pm$", value = TRUE), c(),
-                  # label = "Base.pm installed")
+      expect_equal(grep(lib_files, pattern = "\\.pm$", value = TRUE), c(),
+                  label = "Base.pm installed")
 
       lines <- system("perl -MMojo::Base=-strict -lE 'say 1'", intern = TRUE)
       expect_equal(lines, "1")
